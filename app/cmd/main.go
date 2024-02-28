@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"database/sql"
@@ -7,19 +7,12 @@ import (
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
+
+	// Import models package (if relevant)
+
+	gql "github.com/muhammadali07/service-grap-go-api/app/gql"
+	// Import repository package
 )
-
-type User struct {
-	ID    int
-	Name  string
-	Email string
-}
-
-type Post struct {
-	ID      int
-	Title   string
-	Content string
-}
 
 func main() {
 	// Koneksi database
@@ -29,16 +22,12 @@ func main() {
 	}
 	defer db.Close()
 
-	// Repository user
-	userRepository := NewUserRepository(db)
-
-	// Repository post
-	postRepository := NewPostRepository(db)
+	// postRepository := repository.NewPostRepository(db)
 
 	// Skema GraphQL
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query:    QueryType(userRepository, postRepository),
-		Mutation: MutationType(userRepository, postRepository),
+		Query:    gql.Query(userRepository, postRepository),
+		Mutation: gql.Mutation(userRepository, postRepository),
 	})
 	if err != nil {
 		panic(err)
