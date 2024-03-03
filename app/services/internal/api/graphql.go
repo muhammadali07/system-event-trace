@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/99designs/gqlgen/handler"
+	"github.com/muhammadali07/service-grap-go-api/app/pkg/config"
 	"github.com/muhammadali07/service-grap-go-api/app/services/internal/handler"
 	"github.com/muhammadali07/service-grap-go-api/app/services/internal/service"
-	"github.com/muhammadali07/service-grap-go-api/app/services/pkg/config"
 )
 
 func Serve(cfg *config.Config, db *postgres.DB) {
