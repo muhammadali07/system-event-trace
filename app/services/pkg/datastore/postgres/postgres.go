@@ -5,7 +5,7 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
-	"github.com/muhammadali07/service-grap-go-api/app/pkg/config"
+	"github.com/muhammadali07/service-grap-go-api/app/services/pkg/config"
 )
 
 type DB struct {
