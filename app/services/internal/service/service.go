@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/muhammadali07/service-grap-go-api/app/services/domain/repository"
+	"github.com/muhammadali07/service-grap-go-api/app/services/internal/domain/repository"
 )
 
 type Service struct {

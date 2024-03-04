@@ -1,7 +1,7 @@
 package graphql
 
 import (
-	"github.com/yourusername/yourapp/internal/service"
+	"github.com/muhammadali07/service-grap-go-api/app/services/internal/service"
 )
 
 type Resolver struct {
