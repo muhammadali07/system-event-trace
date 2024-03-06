@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/gofiber/fiber"
+import "github.com/gofiber/fiber/v2"
 
 func HandleError(ctx *fiber.Ctx, remark string, status int) error {
 	response := make(map[string]any)

@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/muhammadali07/service-grap-go-api/services/gl/app"
 	"github.com/muhammadali07/service-grap-go-api/services/gl/repository"
 	"github.com/sirupsen/logrus"
