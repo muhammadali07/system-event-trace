@@ -2,15 +2,15 @@ package api
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
-	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
+	"github.com/gofiber/fiber"
 	"github.com/muhammadali07/service-grap-go-api/services/gl/app"
 	"github.com/muhammadali07/service-grap-go-api/services/gl/repository"
+	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 type GLApi struct {
-	app       *app.ICApp
+	app       *app.GLApp
 	log       *logrus.Logger
 	validator *validator.Validate
 }

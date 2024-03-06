@@ -2,88 +2,87 @@ package api
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/jinzhu/copier"
+	"github.com/gofiber/fiber"
 	"github.com/sirupsen/logrus"
+
 	// "github.com/muhammadali07/service-grap-go-api/services/gl/api/serializer"
 	"github.com/muhammadali07/service-grap-go-api/services/gl/models"
-	"github.com/muhammadali07/service-grap-go-api/services/gl/pkg/utils"
+	utils "github.com/muhammadali07/service-grap-go-api/services/gl/pkg/utils"
 )
 
 var (
 	DATE_FORMAT = "2006-01-02"
 )
 
-func (i *GLApi) createActivity(ctx *fiber.Ctx) (err error) {
-	var act models.Activity
-	err = ctx.BodyParser(&act)
+func (i *GLApi) createTransaction(ctx *fiber.Ctx) (err error) {
+	var req models.Transaksi
+	err = ctx.BodyParser(&req)
 	if err != nil {
 		remark := "failed to parse request body to JSON"
 		i.log.WithFields(logrus.Fields{
 			"error": err.Error(),
 		}).Error(remark)
-		err = handleError(ctx, remark, http.StatusBadRequest)
+		err = utils.HandleError(ctx, remark, http.StatusBadRequest)
 		return
 	}
-	err = i.validator.Struct(act)
+	err = i.validator.Struct(req)
 	if err != nil {
 		remark := "failed to validate JSON request"
 		i.log.WithFields(logrus.Fields{
 			"error": err.Error(),
 		}).Error(remark)
-		err = handleError(ctx, remark, http.StatusBadRequest)
+		err = utils.HandleError(ctx, remark, http.StatusBadRequest)
 		return
 	}
-	err = i.app.CreateActivity(&act)
+	err = i.app.CreateTransaction(&req)
 	if err != nil {
-		err = handleError(ctx, err.Error(), http.StatusBadRequest)
+		err = utils.HandleError(ctx, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = handleSuccess(ctx, "create activity success", nil, http.StatusCreated)
+	err = utils.HandleSuccess(ctx, "create activity success", nil, http.StatusCreated)
 	return
 }
 
-func (i *ICAPI) getListActivities(ctx *fiber.Ctx) (err error) {
-	var query serializer.QueryListActivities
-	response := []serializer.ResponseListActivities{}
-	err = ctx.QueryParser(&query)
-	if err != nil {
-		remark := "failed to parse query params to struct"
-		i.log.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error(remark)
-		err = handleError(ctx, remark, http.StatusBadRequest)
-		return
-	}
-	err = i.validator.Struct(query)
-	if err != nil {
-		remark := "failed to validate query params"
-		i.log.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error(remark)
-		err = handleError(ctx, remark, http.StatusBadRequest)
-		return
-	}
-	emps, err := i.app.GetListActivities(query.Start, query.End, query.Sort, query.ProjectDivsion, query.EmployeeID)
-	if err != nil {
-		err = handleError(ctx, err.Error(), http.StatusBadRequest)
-		return
-	}
-	err = copier.Copy(&response, emps)
-	if err != nil {
-		remark := "failed to parse query resposne"
-		i.log.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error(remark)
-		err = handleError(ctx, remark, http.StatusInternalServerError)
-		return
-	}
-	data := groupResponseActivityByDate(response)
-	err = handleSuccess(ctx, "query list employees success", data, http.StatusCreated)
-	return
-}
+// func (i *ICAPI) getListActivities(ctx *fiber.Ctx) (err error) {
+// 	var query serializer.QueryListActivities
+// 	response := []serializer.ResponseListActivities{}
+// 	err = ctx.QueryParser(&query)
+// 	if err != nil {
+// 		remark := "failed to parse query params to struct"
+// 		i.log.WithFields(logrus.Fields{
+// 			"error": err.Error(),
+// 		}).Error(remark)
+// 		err = handleError(ctx, remark, http.StatusBadRequest)
+// 		return
+// 	}
+// 	err = i.validator.Struct(query)
+// 	if err != nil {
+// 		remark := "failed to validate query params"
+// 		i.log.WithFields(logrus.Fields{
+// 			"error": err.Error(),
+// 		}).Error(remark)
+// 		err = handleError(ctx, remark, http.StatusBadRequest)
+// 		return
+// 	}
+// 	emps, err := i.app.GetListActivities(query.Start, query.End, query.Sort, query.ProjectDivsion, query.EmployeeID)
+// 	if err != nil {
+// 		err = handleError(ctx, err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
+// 	err = copier.Copy(&response, emps)
+// 	if err != nil {
+// 		remark := "failed to parse query resposne"
+// 		i.log.WithFields(logrus.Fields{
+// 			"error": err.Error(),
+// 		}).Error(remark)
+// 		err = handleError(ctx, remark, http.StatusInternalServerError)
+// 		return
+// 	}
+// 	data := groupResponseActivityByDate(response)
+// 	err = handleSuccess(ctx, "query list employees success", data, http.StatusCreated)
+// 	return
+// }
 
 // func groupResponseActivityByDate(activities []serializer.ResponseListActivities) (groupActivities map[string]interface{}) {
 // 	groupActivities = make(map[string]interface{})
@@ -164,9 +163,9 @@ func (i *ICAPI) getListActivities(ctx *fiber.Ctx) (err error) {
 // 	return
 // }
 
-func setupTransaksiRoute(server *fiber.App, api *ICAPI) {
-	group := server.Group("/activity")
-	group.Post("", api.createActivity)
+func setupTransaksiRoute(server *fiber.App, api *GLApi) {
+	group := server.Group("/journal")
+	group.Post("", api.createTransaction)
 	// group.Get("", api.getListActivities)
 	// group.Put("/:id", api.updateActivity)
 	// group.Delete("/:id", api.deleteActivity)
