@@ -21,38 +21,38 @@ type Account struct {
 	Saldo      int    `json:"saldo"`
 }
 
-type registerRequest struct {
+type RegisterRequest struct {
 	Nama string `json:"nama" binding:"required"`
 	NIK  string `json:"nik" binding:"required"`
 	NoHP string `json:"noHp" binding:"required"`
 	PIN  string `json:"pin" binding:"required"`
 }
 
-type depositRequest struct {
+type DepositRequest struct {
 	NoRekening string `json:"noRekening" binding:"required"`
 	Nominal    int    `json:"nominal" binding:"required,gt=0"`
 }
 
-type withdrawRequest struct {
+type WithdrawRequest struct {
 	NoRekening string `json:"noRekening" binding:"required"`
 	Nominal    int    `json:"nominal" binding:"required,gt=0"`
 }
 
-type transferRequest struct {
+type TransferRequest struct {
 	NoRekeningAsal   string `json:"noRekeningAsal" binding:"required"`
 	NoRekeningTujuan string `json:"noRekeningTujuan" binding:"required"`
 	Nominal          int    `json:"nominal" binding:"required,gt=0"`
 }
 
-type registerResponse struct {
+type RegisterResponse struct {
 	NoRekening string `json:"noRekening"`
 }
 
-type depositResponse struct {
+type DepositResponse struct {
 	Saldo int `json:"saldo"`
 }
 
-type errorResponse struct {
+type ErrorResponse struct {
 	Remark string `json:"remark"`
 }
 
@@ -68,7 +68,7 @@ type UseCase interface {
 	CreateAccount(ctx context.Context, nama, nik, noHp, pin string) (*Account, error)
 	Deposit(ctx context.Context, noRekening string, nominal int) (int, error)
 	Withdraw(ctx context.Context, noRekening string, nominal int) (int, error)
-	Transfer(ctx context.Context, req transferRequest) (int, error)
+	Transfer(ctx context.Context, req TransferRequest) (int, error)
 	GetSaldo(ctx context.Context, noRekening string) (int, error)
 	GetMutasi(ctx context.Context, noRekening string) ([]map[string]interface{}, error)
 }

@@ -12,4 +12,4 @@ sql:
       go:
         package: "services/acc/internal/infrastructure/sqlc/datastore"
         out: "sqlc"
-        sql_package: "pgx/v5"
+        sql_package: "sqlx"
