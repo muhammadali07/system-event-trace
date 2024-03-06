@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// Buat use case
-	uc := usecase.NewUseCase(db)
+	uc := usecase.AccountUseCase(db)
 
 	// Buat server HTTP
 	app := fiber.New()
