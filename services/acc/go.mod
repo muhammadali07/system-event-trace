@@ -1,4 +1,4 @@
-module github.com/muhammadali07/service-grap-go-api
+module github.com/muhammadali07/service-grap-go-api/services/acc
 
 go 1.21.1
 

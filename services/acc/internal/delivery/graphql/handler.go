@@ -1,11 +1,12 @@
 package main
 
 import (
-	"app/internal/delivery/http"
-	"app/internal/infrastructure/database"
-	"app/internal/usecase"
 	"log"
 	"os"
+
+	"github.com/muhammadali07/service-grap-go-api/services/acc/internal/delivery/http"
+	"github.com/muhammadali07/service-grap-go-api/services/acc/internal/infrastructure/database"
+	"github.com/muhammadali07/service-grap-go-api/services/acc/internal/usecase"
 
 	"github.com/gofiber/fiber/v2"
 )
