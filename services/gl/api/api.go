@@ -5,8 +5,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
-	"ihsansolusi.co.id/information-centre/backend/app"
-	"ihsansolusi.co.id/information-centre/backend/repository"
+	"github.com/muhammadali07/service-grap-go-api/services/gl/app"
+	"github.com/muhammadali07/service-grap-go-api/services/gl/repository"
 )
 
 type GLApi struct {
@@ -23,7 +23,5 @@ func InitServer(server *fiber.App, db *gorm.DB, log *logrus.Logger, validator *v
 		log:       log,
 		validator: validator,
 	}
-	setupEmployeeRoute(server, api)
-	setupProjectRoute(server, api)
-	setupActivityRoute(server, api)
+	setupTransaksiRoute(server, api)
 }

@@ -1,33 +1,23 @@
 package repository
 
 import (
+	"github.com/muhammadali07/service-grap-go-api/services/gl/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
-	"ihsansolusi.co.id/information-centre/backend/models"
 )
 
-type ICRepository struct {
+type GLRepository struct {
 	log *logrus.Logger
 	db  *gorm.DB
 }
 
-func migrateEmployee(db *gorm.DB) {
-	db.AutoMigrate(models.Employee{}, models.Address{}, models.Skills{})
+func migrateTransaksi(db *gorm.DB) {
+	db.AutoMigrate(models.Transaksi{})
 }
 
-func migrateProject(db *gorm.DB) {
-	db.AutoMigrate(models.Client{}, models.Project{}, models.Delivery{}, models.Engineer{})
-}
-
-func migrateActivity(db *gorm.DB) {
-	db.AutoMigrate(models.Activity{})
-}
-
-func InitRepository(db *gorm.DB, log *logrus.Logger) *ICRepository {
-	migrateEmployee(db)
-	migrateProject(db)
-	migrateActivity(db)
-	return &ICRepository{
+func InitRepository(db *gorm.DB, log *logrus.Logger) *GLRepository {
+	migrateTransaksi(db)
+	return &GLRepository{
 		db:  db,
 		log: log,
 	}

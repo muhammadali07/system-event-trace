@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/sirupsen/logrus"
-	"ihsansolusi.co.id/information-centre/backend/repository"
+	"github.com/muhammadali07/service-grap-go-api/services/gl/repository"
 )
 
 type GLApp struct {
@@ -10,8 +10,8 @@ type GLApp struct {
 	log  *logrus.Logger
 }
 
-func InitApp(repo *repository.ICRepository, log *logrus.Logger) *ICApp {
-	return &ICApp{
+func InitApp(repo *repository.ICRepository, log *logrus.Logger) *GLApp {
+	return &GLApp{
 		repo: repo,
 		log:  log,
 	}
