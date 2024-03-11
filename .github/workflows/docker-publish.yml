@@ -21,10 +21,10 @@ jobs:
 
       - name: Build and push service Acc image
         run: |
-          docker build -t pydev07/service-a:latest ./services/acc/
+          docker build -t pydev07/service-a:latest ./docker/acc/
           docker push pydev07/service-acc:latest
 
       - name: Build and push service GL image
         run: |
-          docker build -t pydev07/service-b:latest ./services/gl/
+          docker build -t pydev07/service-b:latest ./docker/gl/
           docker push pydev07/service-gl:latest
