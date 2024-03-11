@@ -4,7 +4,7 @@ import (
     "context"
     "encoding/json"
     "github.com/muhammadali07/service-grap-go-api/services/kafka/internal/app/entity"
-    "github.com/Shopify/sarama"
+    "github.com/IBM/sarama"
 )
 
 type KafkaConsumerUsecase struct {

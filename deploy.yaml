@@ -1,0 +1,63 @@
+# service acc
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-acc-grap
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: service-acc
+  template:
+    metadata:
+      labels:
+        app: service-acc-grap
+    spec:
+      containers:
+      - name: service-acc-grap-container
+        image: your-service-a-image:latest
+        ports:
+        - containerPort: 8080
+
+# service gl
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-gl-rest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service-gl
+  template:
+    metadata:
+      labels:
+        app: service-gl-grap
+    spec:
+      containers:
+      - name: service-gl-rest-container
+        image: your-service-b-image:latest
+        ports:
+        - containerPort: 9090
+
+
+# database postgresql
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-acc-gl-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres-acc-gl
+  template:
+    metadata:
+      labels:
+        app: postgres-acc-gl
+    spec:
+      containers:
+      - name: postgres-a-container
+        image: postgres:latest
+        ports:
+        - containerPort: 5432

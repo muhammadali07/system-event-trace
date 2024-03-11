@@ -1,7 +1,7 @@
 package kafka
 
 import (
-    "github.com/Shopify/sarama"
+    "github.com/IBM/sarama"
 )
 
 // KafkaProducer represents the Kafka producer
