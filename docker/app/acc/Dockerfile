@@ -1,15 +1,22 @@
 FROM golang:1.18-alpine
 
-WORKDIR /app
+# Set the Current Working Directory inside the container
+WORKDIR /go/src/app
 
-COPY go.mod go.sum ./
+COPY ../services/acc/go.mod ../services/acc/go.sum ./
+
+RUN apk add --no-cache git
 
 RUN go mod download
 
 # Menyalin semua directory yang berisi kode sumber aplikasi
-COPY cmd ./
-COPY internal ./
+COPY ../services/acc/cmd ./
+COPY ../services/acc/internal ./
 
-RUN go build -o main
+# Build the Go app
+RUN CGO_ENABLED=1 GOOS=linux go build -o main ../services/acc/main.go
 
-CMD ["./main"]
+EXPOSE 50051
+
+# Run the executable
+CMD ["/app/main"]
