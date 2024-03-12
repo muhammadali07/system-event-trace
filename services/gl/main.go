@@ -28,7 +28,7 @@ func main() {
 
 	API_HOST := cfg.AppHost
 	API_PORT := cfg.AppPort
-	API_ADDRESS := fmt.Sprintf("%s:%d", API_HOST, API_PORT)
+	API_ADDRESS := fmt.Sprintf("%v:%v", API_HOST, API_PORT)
 	DB_HOST := cfg.DatabaseHost
 	DB_PORT := cfg.DatabasePort
 	DB_USERNAME := cfg.DatabaseUser

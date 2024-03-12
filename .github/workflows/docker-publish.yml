@@ -28,3 +28,8 @@ jobs:
         run: |
           docker build -t pydev07/service-b:latest ./docker/app/gl
           docker push pydev07/service-gl:latest
+
+      - name: Build and push Database image
+        run: |
+          docker build -t pydev07/postresql:latest ./docker/db
+          docker push pydev07/postgresql:latest
