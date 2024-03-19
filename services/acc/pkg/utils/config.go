@@ -9,7 +9,7 @@ type Config struct {
 	// Tambahkan field konfigurasi sesuai dengan kebutuhan Anda.
 	// Misalnya:
 	AppHost          string
-	AppPort          string
+	AppPort          int
 	DatabaseHost     string
 	DatabasePort     int
 	DatabaseUser     string
@@ -23,7 +23,8 @@ type Config struct {
 
 // InitConfig inisialisasi konfigurasi menggunakan Viper.
 func InitConfig() (*Config, error) {
-	// Inisialisasi Viper
+
+	// // Set path file konfigurasi untuk Viper
 	viper.SetConfigName("config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
@@ -37,17 +38,16 @@ func InitConfig() (*Config, error) {
 
 	// Buat instance Config dan isi sesuai dengan konfigurasi yang dibaca
 	config := &Config{
-		AppHost:          viper.GetString("APPHOST"),
-		AppPort:          viper.GetString("APPPORT"),
-		DatabasePort:     viper.GetInt("DATABASEPORT"),
-		DatabaseHost:     viper.GetString("DATABASEHOST"),
-		DatabaseUser:     viper.GetString("DATABASEUSER"),
-		DatabasePassword: viper.GetString("DATABASEPASSWORD"),
+		AppHost:          viper.GetString("APP_HOST"),
+		AppPort:          viper.GetInt("APP_PORT"),
+		DatabasePort:     viper.GetInt("DATABASE_PORT"),
+		DatabaseHost:     viper.GetString("DATABASE_HOST"),
+		DatabaseUser:     viper.GetString("DATABASE_USER"),
+		DatabasePassword: viper.GetString("DATABASE_PASSWORD"),
 		Database:         viper.GetString("DATABASE"),
 		Service:          viper.GetString("SERVICE"),
-		KafkaHost:        viper.GetString("KAFKAHOST"),
-		KafkaPort:        viper.GetInt("KAFKAPORT"),
-		KafkaTopic:       viper.GetString("KAFKATOPIC"),
+		KafkaHost:        viper.GetString("KAFKA_HOST"),
+		KafkaPort:        viper.GetInt("KAFKA_PORT"),
 	}
 
 	return config, nil

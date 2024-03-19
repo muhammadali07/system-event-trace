@@ -1,0 +1,14 @@
+APPHOST=localhost
+APPPORT=3000
+DATABASEPORT=5432
+DATABASEHOST=localhost
+DATABASEUSER=devkafkauser
+DATABASEPASSWORD=devkafkapassword
+DATABASE=devkafka
+SERVICE=Account-Service-Kafka
+
+
+# kafka config
+KAFKAHOST=localhost
+KAFKAPORT=9092
+KAFKATOPICS=account_topic

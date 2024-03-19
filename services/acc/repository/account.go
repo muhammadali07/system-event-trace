@@ -12,6 +12,7 @@ func (r *Accountepository) InsertNewAccount(req *models.Account) (err error) {
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
 			"error":      err.Error(),
+			"id":         req.ID,
 			"nama":       req.Nama,
 			"nik":        req.Nik,
 			"no_hp":      req.NoHp,
