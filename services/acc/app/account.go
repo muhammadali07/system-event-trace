@@ -19,6 +19,14 @@ func (a *AccountApp) CreateAccount(req *models.Account) (err error) {
 			"pin":   req.Pin,
 		}).Warn(err.Error())
 	} else {
+		_, err := a.SendMessageToKafka(*req)
+		if err != nil {
+			a.log.WithFields(logrus.Fields{
+				"error":   err.Error(),
+				"payload": req,
+			}).Warn(err.Error())
+		}
+
 		a.log.WithFields(logrus.Fields{
 			"nama":  req.Nama,
 			"nik":   req.Nik,
