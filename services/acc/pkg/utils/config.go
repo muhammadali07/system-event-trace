@@ -10,13 +10,15 @@ type Config struct {
 	// Misalnya:
 	AppHost          string
 	AppPort          string
-	Driver           string
 	DatabaseHost     string
 	DatabasePort     int
 	DatabaseUser     string
 	DatabasePassword string
 	Database         string
 	Service          string
+	KafkaHost        string
+	KafkaPort        int
+	KafkaTopic       string
 }
 
 // InitConfig inisialisasi konfigurasi menggunakan Viper.
@@ -35,15 +37,17 @@ func InitConfig() (*Config, error) {
 
 	// Buat instance Config dan isi sesuai dengan konfigurasi yang dibaca
 	config := &Config{
-		AppHost:          viper.GetString("AppHost"),
-		AppPort:          viper.GetString("AppPort"),
-		Driver:           viper.GetString("Driver"),
-		DatabasePort:     viper.GetInt("DatabasePort"),
-		DatabaseHost:     viper.GetString("DatabaseHost"),
-		DatabaseUser:     viper.GetString("DatabaseUser"),
-		DatabasePassword: viper.GetString("DatabasePassword"),
-		Database:         viper.GetString("Database"),
-		Service:          viper.GetString("Service"),
+		AppHost:          viper.GetString("APPHOST"),
+		AppPort:          viper.GetString("APPPORT"),
+		DatabasePort:     viper.GetInt("DATABASEPORT"),
+		DatabaseHost:     viper.GetString("DATABASEHOST"),
+		DatabaseUser:     viper.GetString("DATABASEUSER"),
+		DatabasePassword: viper.GetString("DATABASEPASSWORD"),
+		Database:         viper.GetString("DATABASE"),
+		Service:          viper.GetString("SERVICE"),
+		KafkaHost:        viper.GetString("KAFKAHOST"),
+		KafkaPort:        viper.GetInt("KAFKAPORT"),
+		KafkaTopic:       viper.GetString("KAFKATOPIC"),
 	}
 
 	return config, nil

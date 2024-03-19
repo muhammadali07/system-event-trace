@@ -1,16 +1,14 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
 type Account struct {
-	ID               uint            `json:"id" gorm:"primarykey"`
-	TanggalTransaksi sql.NullTime    `json:"tanggal_transaksi"`
-	NoRekeningKredit sql.NullString  `json:"no_rekening_kredit"`
-	NoRekeningDebit  sql.NullString  `json:"no_rekening_debit"`
-	NominalKredit    sql.NullFloat64 `json:"nominal_kredit"`
-	NominalDebit     sql.NullFloat64 `json:"nominal_debit"`
-	CreatedAt        time.Time       `json:"created_at"`
+	ID        uint      `json:"id" gorm:"primarykey"`
+	Nama      string    `json:"nama"`
+	Nik       string    `json:"nik"`
+	NoHp      string    `json:"no_hp"`
+	Pin       string    `json:"pin"`
+	CreatedAt time.Time `json:"created_at"`
 }

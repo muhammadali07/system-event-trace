@@ -9,8 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type GLApi struct {
-	app       *app.GLApp
+type AcccountApi struct {
+	app       *app.AccountApp
 	log       *logrus.Logger
 	validator *validator.Validate
 }
@@ -18,7 +18,7 @@ type GLApi struct {
 func InitServer(server *fiber.App, db *gorm.DB, log *logrus.Logger, validator *validator.Validate) {
 	repo := repository.InitRepository(db, log)
 	app := app.InitApp(repo, log)
-	api := &GLApi{
+	api := &AcccountApi{
 		app:       app,
 		log:       log,
 		validator: validator,

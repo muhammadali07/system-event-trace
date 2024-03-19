@@ -6,18 +6,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type GLRepository struct {
+type Accountepository struct {
 	log *logrus.Logger
 	db  *gorm.DB
 }
 
 func migrateTransaksi(db *gorm.DB) {
-	db.AutoMigrate(models.Transaksi{})
+	db.AutoMigrate(models.Account{})
 }
 
-func InitRepository(db *gorm.DB, log *logrus.Logger) *GLRepository {
+func InitRepository(db *gorm.DB, log *logrus.Logger) *Accountepository {
 	migrateTransaksi(db)
-	return &GLRepository{
+	return &Accountepository{
 		db:  db,
 		log: log,
 	}

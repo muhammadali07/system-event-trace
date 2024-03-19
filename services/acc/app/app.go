@@ -5,13 +5,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type GLApp struct {
-	repo *repository.GLRepository
+type AccountApp struct {
+	repo *repository.Accountepository
 	log  *logrus.Logger
 }
 
-func InitApp(repo *repository.GLRepository, log *logrus.Logger) *GLApp {
-	return &GLApp{
+func InitApp(repo *repository.Accountepository, log *logrus.Logger) *AccountApp {
+	return &AccountApp{
 		repo: repo,
 		log:  log,
 	}
