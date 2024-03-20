@@ -1,0 +1,1 @@
+go build -ldflags="-s -w" -o service_account main.go
