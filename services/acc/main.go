@@ -39,6 +39,8 @@ func main() {
 	validator := validator.New()
 
 	api.InitServer(server, db, logger, validator)
+
+	logrus.Info(fmt.Sprintf("Server :%v started successfully 🚀 running on : %v", cfg.Service, API_ADDRESS))
+
 	server.Listen(API_ADDRESS)
-	logrus.Info(fmt.Sprintf("service : %v running on : %v", cfg.Service, API_ADDRESS))
 }
