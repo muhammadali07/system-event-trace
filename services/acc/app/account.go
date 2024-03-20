@@ -4,10 +4,15 @@ import (
 	"fmt"
 
 	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
+	"github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
 	"github.com/sirupsen/logrus"
 )
 
-func (a *AccountApp) CreateAccount(req *models.Account) (err error) {
+func (a *AccountApp) CreateAccount(req *models.Account) (response string, err error) {
+
+	resGenNomorRekening := utils.GenerateAccountNumber()
+	req.NomorRekening = resGenNomorRekening
+
 	err = a.repo.InsertNewAccount(req)
 	if err != nil {
 		err = fmt.Errorf("failed to create account")
@@ -27,6 +32,7 @@ func (a *AccountApp) CreateAccount(req *models.Account) (err error) {
 			}).Warn(err.Error())
 		}
 
+		response = resGenNomorRekening
 		a.log.WithFields(logrus.Fields{
 			"nama":  req.Nama,
 			"nik":   req.Nik,

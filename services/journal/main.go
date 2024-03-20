@@ -29,6 +29,9 @@ func main() {
 	}
 	// Brokers represent the Kafka cluster to connect to.
 	kafkaAddress := fmt.Sprintf(`%v:%v`, cfg.KafkaHost, cfg.KafkaPort)
+
+	logrus.Info(fmt.Sprintf("Server :%v started successfully 🚀 running on : %v", cfg.KafkaServiceName, kafkaAddress))
+	
 	brokers := []string{kafkaAddress}
 	conn, err := kafka.Dial("tcp", fmt.Sprintf(`%v`, brokers[0]))
 	if err != nil {
@@ -47,19 +50,17 @@ func main() {
 		m[p.Topic] = struct{}{}
 	}
 	for topic := range m {
-		for i, v := range topicHandlers {
+		for i, _ := range topicHandlers {
 			if i == topic {
-				fmt.Println(i)
-				running := fmt.Sprintf(`execute handling : %v`, v)
-				fmt.Println(running)
+				logrus.Info(
+					"topic_from_kafka: ", i,
+				)
 				go consumeMessages(topic, brokers)
 			}
 		}
 	}
 
 	// 	go consumeMessages(topic, brokers) -> manually getting 1 buy 1 topic by hardcode
-
-	logrus.Info(fmt.Sprintf("Server :%v started successfully 🚀 running on : %v", cfg.KafkaServiceName, kafkaAddress))
 	// Keep the main function running.
 	select {}
 

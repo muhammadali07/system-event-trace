@@ -6,7 +6,6 @@ import (
 	fiber "github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 
-	// "github.com/muhammadali07/service-grap-go-api/services/gl/api/serializer"
 	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
 	utils "github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
 )
@@ -35,12 +34,17 @@ func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
 		return utils.HandleError(ctx, remark, http.StatusBadRequest)
 	}
 
-	err = i.app.CreateAccount(&req)
+	res, err := i.app.CreateAccount(&req)
 	if err != nil {
 		return utils.HandleError(ctx, err.Error(), http.StatusBadRequest)
 	}
 
-	return utils.HandleSuccess(ctx, "registrasi akun berhasil dibuat", nil, http.StatusCreated)
+	out_response := map[string]interface{}{
+		"nomor_rekening_nasabah": res,
+		"data":                   req,
+	}
+
+	return utils.HandleSuccess(ctx, "registrasi akun berhasil dibuat", out_response, http.StatusCreated)
 }
 
 func setupTransaksiRoute(server *fiber.App, api *AcccountApi) {
