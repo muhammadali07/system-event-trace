@@ -20,7 +20,7 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 		}).Warn(err.Error())
 	}
 
-	payloadInsert := models.Account{
+	payloadInsert := &models.Account{
 		ID:            req.ID,
 		Nama:          req.Nama,
 		Nik:           req.Nik,
@@ -28,33 +28,16 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 		Pin:           encryptedPin,
 		NomorRekening: resGenNomorRekening,
 		Saldo:         0,
-		CreatedAt:     time.Time{},
+		CreatedAt:     time.Now(),
 	}
 	err = a.repo.InsertNewAccount(payloadInsert)
 	if err != nil {
 		err = fmt.Errorf("failed to create account")
 		a.log.WithFields(logrus.Fields{
-			"error": err.Error(),
-			"nama":  req.Nama,
-			"nik":   req.Nik,
-			"no_hp": req.NoHp,
-			"pin":   req.Pin,
+			"error":   err.Error(),
+			"payload": req,
 		}).Warn(err.Error())
 	}
-
-	// payload := models.ReqSendingKafka{}
-	// resKafka, err := a.SendMessageToKafka(payload)
-	// if err != nil {
-	// 	a.log.WithFields(logrus.Fields{
-	// 		"error":   err.Error(),
-	// 		"payload": req,
-	// 	}).Warn(err.Error())
-	// }
-
-	// a.log.WithFields(logrus.Fields{
-	// 	"payload":  payload,
-	// 	"response": resKafka,
-	// })
 
 	response = resGenNomorRekening
 	a.log.WithFields(logrus.Fields{

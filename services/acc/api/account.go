@@ -40,11 +40,10 @@ func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
 	}
 
 	out_response := map[string]interface{}{
-		"nomor_rekening_nasabah": res,
-		"data":                   req,
+		"account_number": res,
 	}
 
-	return utils.HandleSuccess(ctx, "registrasi akun berhasil dibuat", out_response, http.StatusCreated)
+	return utils.HandleSuccess(ctx, "registration account number success", out_response, http.StatusCreated)
 }
 
 func setupAccountRoute(server *fiber.App, api *AcccountApi) {
