@@ -10,6 +10,19 @@ import (
 )
 
 func (a *AccountApp) CreateAccount(req *models.Account) (response string, err error) {
+	// validation account number exist
+
+	valAccountNumber, err := a.GetAccountNumber(models.ReqGetAccountNumber{
+		NIK:         req.NIK,
+		PhoneNumber: req.PhoneNumber,
+	})
+
+	if err != nil {
+		remark := fmt.Sprintf("nik or phone_number has already exist with account number %v", valAccountNumber)
+		err = fmt.Errorf(remark)
+		return
+	}
+
 	resGenNomorRekening := utils.GenerateAccountNumber()
 	encryptedPin, err := utils.EncryptPin(req.Pin)
 	if err != nil {
@@ -22,12 +35,12 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 
 	payloadInsert := &models.Account{
 		ID:            req.ID,
-		Nama:          req.Nama,
-		Nik:           req.Nik,
-		NoHp:          req.NoHp,
+		Name:          req.Name,
+		NIK:           req.NIK,
+		PhoneNumber:   req.PhoneNumber,
 		Pin:           encryptedPin,
-		NomorRekening: resGenNomorRekening,
-		Saldo:         0,
+		AccountNumber: resGenNomorRekening,
+		Balance:       0,
 		CreatedAt:     time.Now(),
 	}
 	err = a.repo.InsertNewAccount(payloadInsert)
@@ -41,10 +54,25 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 
 	response = resGenNomorRekening
 	a.log.WithFields(logrus.Fields{
-		"nama":  req.Nama,
-		"nik":   req.Nik,
-		"no_hp": req.NoHp,
-		"pin":   req.Pin,
+		"name":         req.Name,
+		"nik":          req.NIK,
+		"phone_number": req.PhoneNumber,
+		"pin":          req.Pin,
 	}).Info("create account success")
+	return
+}
+
+func (a *AccountApp) GetAccountNumber(req models.ReqGetAccountNumber) (response string, err error) {
+	res, err := a.repo.GetAccountNumber(req)
+	if err != nil {
+		err = fmt.Errorf("failed to create account")
+		a.log.WithFields(logrus.Fields{
+			"error":   err.Error(),
+			"payload": req,
+		}).Warn(err.Error())
+	}
+
+	response = res.AccountNumber
+	a.log.WithFields(logrus.Fields{"account_number": res}).Info("get account number success")
 	return
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func (r *Accountepository) InsertCashDeposito(req models.CashDeposit) (err error) {
-	err = r.db.Model(models.Account{Saldo: req.Nominal}).Where("nomor_rekening = ?", req.NomorRekening).Updates(req).Error
+	err = r.db.Create(req).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
 			"error":      err.Error(),

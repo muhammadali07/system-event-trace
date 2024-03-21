@@ -6,11 +6,16 @@ import (
 
 type Account struct {
 	ID            uint      `json:"id" gorm:"primarykey"`
-	Nama          string    `json:"nama"`
-	Nik           string    `json:"nik"`
-	NoHp          string    `json:"no_hp"`
+	Name          string    `json:"name"`
+	NIK           string    `json:"nik"`
+	PhoneNumber   string    `json:"phone_number"`
 	Pin           string    `json:"pin"`
-	NomorRekening string    `json:"nomor_rekening"`
-	Saldo         float64   `json:"saldo"`
+	AccountNumber string    `json:"account_number"`
+	Balance       float64   `json:"balance"`
 	CreatedAt     time.Time `json:"created_at"`
+}
+
+type ReqGetAccountNumber struct {
+	NIK         string
+	PhoneNumber string
 }
