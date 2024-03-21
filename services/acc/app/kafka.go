@@ -10,9 +10,9 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-func (a *AccountApp) SendMessageToKafka(params models.Account) (response models.RespSendingKafka, err error) {
+func (a *AccountApp) SendMessageToKafka(params models.ReqSendingKafka) (response models.RespSendingKafka, err error) {
 	// Set up Kafka writer
-	topic := "account_topic"
+	topic := params.Topic
 	w := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:  []string{"localhost:9092"},
 		Topic:    topic,
@@ -21,7 +21,7 @@ func (a *AccountApp) SendMessageToKafka(params models.Account) (response models.
 	defer w.Close()
 
 	// Create message payload
-	payload, err := json.Marshal(params)
+	payload, err := json.Marshal(params.Data)
 	if err != nil {
 		err = fmt.Errorf(err.Error())
 		return

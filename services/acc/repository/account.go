@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Accountepository) InsertNewAccount(req *models.Account) (err error) {
+func (r *Accountepository) InsertNewAccount(req models.Account) (err error) {
 	err = r.db.Create(req).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{

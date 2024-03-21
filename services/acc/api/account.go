@@ -47,7 +47,7 @@ func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
 	return utils.HandleSuccess(ctx, "registrasi akun berhasil dibuat", out_response, http.StatusCreated)
 }
 
-func setupTransaksiRoute(server *fiber.App, api *AcccountApi) {
+func setupAccountRoute(server *fiber.App, api *AcccountApi) {
 	group := server.Group("/account")
 	group.Post("/daftar", api.createAccount)
 	// Add other routes as needed

@@ -23,5 +23,6 @@ func InitServer(server *fiber.App, db *gorm.DB, log *logrus.Logger, validator *v
 		log:       log,
 		validator: validator,
 	}
+	setupAccountRoute(server, api)
 	setupTransaksiRoute(server, api)
 }

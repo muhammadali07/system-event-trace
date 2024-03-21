@@ -11,5 +11,6 @@ type Account struct {
 	NoHp          string    `json:"no_hp"`
 	Pin           string    `json:"pin"`
 	NomorRekening string    `json:"nomor_rekening"`
+	Saldo         float64   `json:"saldo"`
 	CreatedAt     time.Time `json:"created_at"`
 }
