@@ -5,7 +5,6 @@ import (
 
 	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm/clause"
 )
 
 func (r *Accountepository) InsertNewAccount(req *models.Account) (err error) {
@@ -25,8 +24,7 @@ func (r *Accountepository) InsertNewAccount(req *models.Account) (err error) {
 }
 
 func (r *Accountepository) GetAccountNumber(req models.ReqGetAccountNumber) (response models.Account, err error) {
-	// err = r.db.Where("nik = ?", req.NIK).Or("no_hp = ?", req.PhoneNumber).First(&account).Error
-	err = r.db.Preload(clause.Associations).First(&response, "phone_number = ?", req.PhoneNumber).Error
+	err = r.db.Where("nik = ?", req.NIK).Or("phone_number = ?", req.PhoneNumber).Find(&response).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
 			"payload": req,

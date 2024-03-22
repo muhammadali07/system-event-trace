@@ -1,12 +1,14 @@
 package app
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
 	"github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 func (a *AccountApp) CreateAccount(req *models.Account) (response string, err error) {
@@ -18,6 +20,11 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 	})
 
 	if err != nil {
+		err = fmt.Errorf(err.Error())
+		return
+	}
+
+	if valAccountNumber != "" {
 		remark := fmt.Sprintf("nik or phone_number has already exist with account number %v", valAccountNumber)
 		err = fmt.Errorf(remark)
 		return
@@ -64,14 +71,21 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 
 func (a *AccountApp) GetAccountNumber(req models.ReqGetAccountNumber) (response string, err error) {
 	res, err := a.repo.GetAccountNumber(req)
-	if err != nil {
-		err = fmt.Errorf("failed to create account")
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = fmt.Errorf("get account number data does not exist")
 		a.log.WithFields(logrus.Fields{
-			"error":   err.Error(),
-			"payload": req,
+			"req": req,
 		}).Warn(err.Error())
-	}
 
+		return
+	} else if err != nil {
+		err = fmt.Errorf("failed to get account number")
+		a.log.WithFields(logrus.Fields{
+			"req": req,
+		}).Warn(err.Error())
+
+		return
+	}
 	response = res.AccountNumber
 	a.log.WithFields(logrus.Fields{"account_number": res}).Info("get account number success")
 	return
