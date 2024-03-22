@@ -1,18 +1,21 @@
+create database devkafka;
 
 create table journal (
 	id serial primary key,
-	tanggal_transaksi timestamp,
-	no_rekening_kredit varchar(30),
-	no_rekening_debit varchar(30),
-	nominal_kredit decimal,
-	nominal_debit decimal
+	transcation_date timestamp,
+	account_number_credit varchar(30),
+	account_number_debit varchar(30),
+	amount_credit decimal,
+	amount_debit decimal,
+	type_transaction varchar(1)
 );
 
 create table accounts (
 	id serial primary key,
 	nama varchar(200),
 	nik varchar(36),
-	np_hp varchar(20),
+	no_hp varchar(20),
 	pin text,
-	create_at timestamp
+	nomor_rekening varchar(20),
+	created_at timestamp
 );

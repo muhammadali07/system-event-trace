@@ -11,7 +11,7 @@ import (
 )
 
 func (i *AcccountApi) cashDeposit(ctx *fiber.Ctx) error {
-	var req models.CashDeposit
+	var req models.TransactionDepositWithdraw
 	err := ctx.BodyParser(&req)
 	if err != nil {
 		remark := "gagal mem-parsing body permintaan menjadi JSON"
@@ -36,11 +36,10 @@ func (i *AcccountApi) cashDeposit(ctx *fiber.Ctx) error {
 	}
 
 	out_response := map[string]interface{}{
-		"saldo": res,
-		"data":  req,
+		"balance": res,
 	}
 
-	return utils.HandleSuccess(ctx, "tarik tunai berhasil", out_response, http.StatusCreated)
+	return utils.HandleSuccess(ctx, "cash deposito success", out_response, http.StatusCreated)
 }
 
 func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
@@ -62,7 +61,7 @@ func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
 
 func setupTransaksiRoute(server *fiber.App, api *AcccountApi) {
 	group := server.Group("/transaction")
-	group.Post("/tarik", api.cashDeposit)
+	group.Post("/tabung", api.cashDeposit)
 	group.Get("/cek-saldo/:accountNumber", api.getAccountBalance)
 	// Add other routes as needed
 }

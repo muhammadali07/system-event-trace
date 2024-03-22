@@ -15,9 +15,9 @@ type messageHandler func(message kafka.Message)
 
 // Map yang memetakan nama topik ke fungsi yang akan menanganinya
 var topicHandlers = map[string]messageHandler{
-	"account_topic":     handleAccountMessage,
-	"account_get_topic": handleAccountGetMessage,
-	"default_topic":     handleDefaultMessage,
+	"cash_deposit":  handleCashDepositoTrx,
+	"cash_withdraw": handleCashWithDrawTrx,
+	"default_topic": handleDefaultMessage,
 }
 
 func main() {
@@ -94,12 +94,12 @@ func consumeMessages(topic string, brokers []string) {
 	}
 }
 
-func handleAccountMessage(message kafka.Message) {
+func handleCashDepositoTrx(message kafka.Message) {
 	log.Println("Handling message from account_topic:", string(message.Value))
 	// Tambahkan logika penyimpanan data ke dalam database di sini
 }
 
-func handleAccountGetMessage(message kafka.Message) {
+func handleCashWithDrawTrx(message kafka.Message) {
 	log.Println("Handling message from account_get_topic:", string(message.Value))
 	// Tambahkan logika pengambilan data dari database di sini
 }

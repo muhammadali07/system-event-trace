@@ -1,15 +1,14 @@
 package repository
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Accountepository) InsertCashDeposito(req models.CashDeposit) (err error) {
-	err = r.db.Create(req).Error
+func (r *Accountepository) TransactionCashDeposito(req models.TransactionDepositWithdraw) (err error) {
+	err = r.db.Model(models.Account{}).Where("account_number = ?", req.AccountNumber).Update("balance", req.Amount).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
 			"error":      err.Error(),
@@ -22,16 +21,14 @@ func (r *Accountepository) InsertCashDeposito(req models.CashDeposit) (err error
 
 func (r *Accountepository) GetAccountBalance(req string) (response float64, err error) {
 	var account models.Account
-	err = r.db.First(&account, req).Error
+	err = r.db.Where("account_number = ?", req).First(&account).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
 			"error":   err.Error(),
 			"request": req,
 		}).Error("query account balance data failed")
-
-		remark := "data with account number not found"
-		err = fmt.Errorf(remark)
-		return
 	}
+
+	response = account.Balance
 	return
 }

@@ -1,6 +1,6 @@
 package models
 
-type CashDeposit struct {
-	NomorRekening string  `json:"nomor_rekening"`
-	Nominal       float64 `json:"nominal"`
+type TransactionDepositWithdraw struct {
+	AccountNumber string  `json:"account_number"`
+	Amount        float64 `json:"amount"`
 }
