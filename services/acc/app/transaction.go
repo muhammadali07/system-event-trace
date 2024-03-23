@@ -39,7 +39,10 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 		return
 	}
 
-	req.Amount = balance.Respdata.(float64) + req.Amount
+	// Store balance for later use
+	initialBalance := balance.Respdata.(float64)
+
+	req.Amount += initialBalance
 
 	err = a.repo.TransactionCashDeposito(req)
 	if err != nil {
@@ -51,8 +54,7 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 		return
 	}
 
-	balanceNow, _ := a.GetAccountBalance(req.AccountNumber)
-	response = balanceNow.Respdata.(float64)
+	response = initialBalance + req.Amount
 
 	a.log.WithFields(logrus.Fields{
 		"payload":       req,
