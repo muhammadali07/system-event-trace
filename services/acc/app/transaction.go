@@ -11,6 +11,26 @@ import (
 )
 
 func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (response float64, err error) {
+	// journal to kafka
+	payload := models.ReqSendingKafka{
+		Topic: "cash_deposit",
+		Data: models.JournalKafka{
+			TransactionDate:     time.Now(),
+			AccountNumberCredit: req.AccountNumber,
+			AmountCredit:        req.Amount,
+			TransactionType:     "C",
+		},
+	}
+	resKafka, err := a.SendMessageToKafka(payload)
+	if err != nil {
+		a.log.WithFields(logrus.Fields{
+			"error":   err.Error(),
+			"payload": payload,
+		}).Warn("sending message to kafka failed")
+		remark := "cash deposit failed"
+		err = fmt.Errorf(remark)
+		return
+	}
 
 	// get account balance now
 	balance, err := a.GetAccountBalance(req.AccountNumber)
@@ -20,6 +40,7 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 	}
 
 	req.Amount = balance.Respdata.(float64) + req.Amount
+
 	err = a.repo.TransactionCashDeposito(req)
 	if err != nil {
 		err = fmt.Errorf("failed to create account")
@@ -27,32 +48,17 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 			"error":   err.Error(),
 			"payload": req,
 		}).Warn(err.Error())
-	} else {
-		dataSendKafka := map[string]interface{}{
-			"transaction_date":      time.Now(),
-			"account_number_credit": "C",
-			"amount_credit":         req.Amount,
-		}
-		payload := models.ReqSendingKafka{
-			Topic: "cash_deposit",
-			Data:  dataSendKafka,
-		}
-		resKafka, err := a.SendMessageToKafka(payload)
-		if err != nil {
-			a.log.WithFields(logrus.Fields{
-				"error":   err.Error(),
-				"payload": req,
-			}).Warn(err.Error())
-		}
-
-		a.log.WithFields(logrus.Fields{
-			"payload":       req,
-			"sending_kafka": resKafka,
-		}).Info("cash deposit success")
+		return
 	}
 
 	balanceNow, _ := a.GetAccountBalance(req.AccountNumber)
 	response = balanceNow.Respdata.(float64)
+
+	a.log.WithFields(logrus.Fields{
+		"payload":       req,
+		"sending_kafka": resKafka,
+	}).Info("cash deposit success")
+
 	return
 }
 

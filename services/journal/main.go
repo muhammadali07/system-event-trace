@@ -15,7 +15,7 @@ type messageHandler func(message kafka.Message)
 
 // Map yang memetakan nama topik ke fungsi yang akan menanganinya
 var topicHandlers = map[string]messageHandler{
-	"cash_deposit":  handleCashDepositoTrx,
+	"cash_deposit":  handleCashDepositoTrx, // testing cash deposit
 	"cash_withdraw": handleCashWithDrawTrx,
 	"default_topic": handleDefaultMessage,
 }
