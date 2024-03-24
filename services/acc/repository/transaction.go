@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Accountepository) TransactionCashDeposito(req models.TransactionDepositWithdraw) (err error) {
+func (r *Accountepository) TransactionCashWithDraw(req models.TransactionDepositWithdraw) (err error) {
 	err = r.db.Model(models.Account{}).Where("account_number = ?", req.AccountNumber).Update("balance", req.Amount).Error
 	if err != nil {
 		r.log.WithFields(logrus.Fields{
