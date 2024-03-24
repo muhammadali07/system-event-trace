@@ -130,14 +130,16 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 
 	_, err = a.repo.GetvalidateAccount(req.AccountNumberDestination)
 	if err != nil {
-		err = fmt.Errorf(err.Error())
-		return
-	} else if errors.Is(err, gorm.ErrRecordNotFound) {
-		err = fmt.Errorf("account number not found")
-		a.log.WithFields(logrus.Fields{
-			"account_number": req,
-		}).Warn(err.Error())
-		return
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = fmt.Errorf("account number destinaation not found")
+			a.log.WithFields(logrus.Fields{
+				"account_number": req,
+			}).Warn(err.Error())
+			return
+		} else {
+			err = fmt.Errorf(err.Error())
+			return
+		}
 	}
 
 	// journal to kafka
