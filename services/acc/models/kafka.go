@@ -21,3 +21,11 @@ type JournalKafka struct {
 	AccountNumberDebit  string    `json:"account_number_debit"`
 	AmountDebit         float64   `json:"amount_debit"`
 }
+
+type KliringKafka struct {
+	AccountNumberSource      string    `json:"account_number_source"`
+	AccountNumberDestination string    `json:"account_number_destination"`
+	AmountKliring            float64   `json:"amount_kliring"`
+	TransactionDate          time.Time `json:"transaction_date"`
+	TransactionType          string    `json:"transaction_type"`
+}
