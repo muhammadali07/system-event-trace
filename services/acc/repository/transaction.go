@@ -33,7 +33,7 @@ func (r *Accountepository) GetAccountBalance(req string) (response float64, err 
 	return
 }
 
-func (r *Accountepository) GetvalidateAccount(req string) (response string, err error) {
+func (r *Accountepository) GetvalidateAccount(req string) (response models.Account, err error) {
 	var account models.Account
 	err = r.db.Where("account_number = ?", req).First(&account).Error
 	if err != nil {
@@ -42,7 +42,6 @@ func (r *Accountepository) GetvalidateAccount(req string) (response string, err 
 			"request": req,
 		}).Error("query validate account failed")
 	}
-
-	response = account.AccountNumber
+	response = account
 	return
 }

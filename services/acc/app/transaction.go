@@ -128,7 +128,7 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 		return
 	}
 
-	_, err = a.repo.GetvalidateAccount(req.AccountNumberDestination)
+	resValidationAccNumber, err := a.repo.GetvalidateAccount(req.AccountNumberDestination)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			err = fmt.Errorf("account number destinaation not found")
@@ -140,6 +140,11 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 			err = fmt.Errorf(err.Error())
 			return
 		}
+	}
+
+	if resValidationAccNumber.Status != "A" {
+		err = fmt.Errorf("account number destination is not active")
+		return
 	}
 
 	// journal to kafka
@@ -165,12 +170,9 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 	}
 
 	// get account balance account number source
-	var acc []string
-	acc = append(acc, req.AccountNumberSource)
-	acc = append(acc, req.AccountNumberDestination)
-
+	account := []string{req.AccountNumberSource, req.AccountNumberDestination}
 	var balance []float64
-	for _, v := range acc {
+	for _, v := range account {
 		resBalance, errors := a.GetAccountBalance(v)
 		if errors != nil {
 			err = fmt.Errorf(errors.Error())

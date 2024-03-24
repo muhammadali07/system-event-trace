@@ -24,8 +24,8 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 		return
 	}
 
-	if valAccountNumber != "" {
-		remark := fmt.Sprintf("nik or phone_number has already exist with account number %v", valAccountNumber)
+	if valAccountNumber.AccountNumber != "" {
+		remark := fmt.Sprintf("nik or phone_number has already exist with account number %v", valAccountNumber.AccountNumber)
 		err = fmt.Errorf(remark)
 		return
 	}
@@ -48,6 +48,7 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 		Pin:           encryptedPin,
 		AccountNumber: resGenNomorRekening,
 		Balance:       0,
+		Status:        "A",
 		CreatedAt:     time.Now(),
 	}
 	err = a.repo.InsertNewAccount(payloadInsert)
@@ -69,8 +70,8 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 	return
 }
 
-func (a *AccountApp) GetAccountNumber(req models.ReqGetAccountNumber) (response string, err error) {
-	res, err := a.repo.GetAccountNumber(req)
+func (a *AccountApp) GetAccountNumber(req models.ReqGetAccountNumber) (response models.Account, err error) {
+	response, err = a.repo.GetAccountNumber(req)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = fmt.Errorf("get account number data does not exist")
 		a.log.WithFields(logrus.Fields{
@@ -86,7 +87,6 @@ func (a *AccountApp) GetAccountNumber(req models.ReqGetAccountNumber) (response 
 
 		return
 	}
-	response = res.AccountNumber
-	a.log.WithFields(logrus.Fields{"account_number": res}).Info("get account number success")
+	a.log.WithFields(logrus.Fields{"data account number": response}).Info("get data account number success")
 	return
 }

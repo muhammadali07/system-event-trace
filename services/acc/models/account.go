@@ -12,6 +12,7 @@ type Account struct {
 	Pin           string    `json:"pin"`
 	AccountNumber string    `json:"account_number"`
 	Balance       float64   `json:"balance"`
+	Status        string    `json:"status"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 
