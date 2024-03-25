@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (a *AccountApp) SendMessageToKafka(params models.ReqSendingKafka) (response models.RespSendingKafka, err error) {
+func (a *AccountApp) SendMessageToKafka(params models.ReqSendingKafka) (err error) {
 	cfg, _ := utils.InitConfig()
 	broker := fmt.Sprintf("%v:%v", cfg.KafkaHost, cfg.KafkaPort)
 

@@ -21,7 +21,7 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 			TransactionType:     "C",
 		},
 	}
-	resKafka, err := a.SendMessageToKafka(payload)
+	err = a.SendMessageToKafka(payload)
 	if err != nil {
 		a.log.WithFields(logrus.Fields{
 			"error":   err.Error(),
@@ -39,12 +39,20 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 		return
 	}
 
+	a.log.WithFields(logrus.Fields{
+		"account_number":      req.AccountNumber,
+		"balance_account":     balance.Respdata.(float64),
+		"amount_case_deposit": req.Amount,
+	}).Info("request payload cash deposit")
+
 	// Store balance for later use
 	initialBalance := balance.Respdata.(float64)
 
 	req.Amount += initialBalance
 
-	err = a.repo.TransactionCashWithDraw(req)
+	response = req.Amount
+
+	err = a.repo.TransactionCasDeposithWithDraw(req)
 	if err != nil {
 		err = fmt.Errorf("failed to create account")
 		a.log.WithFields(logrus.Fields{
@@ -54,11 +62,9 @@ func (a *AccountApp) CashDeposit(req models.TransactionDepositWithdraw) (respons
 		return
 	}
 
-	response = initialBalance + req.Amount
-
 	a.log.WithFields(logrus.Fields{
-		"payload":       req,
-		"sending_kafka": resKafka,
+		"payload":         req,
+		"balance_account": balance,
 	}).Info("cash deposit success")
 
 	return
@@ -75,7 +81,7 @@ func (a *AccountApp) CashWithDraw(req models.TransactionDepositWithdraw) (respon
 			TransactionType:     "C",
 		},
 	}
-	resKafka, err := a.SendMessageToKafka(payload)
+	err = a.SendMessageToKafka(payload)
 	if err != nil {
 		a.log.WithFields(logrus.Fields{
 			"error":   err.Error(),
@@ -102,7 +108,7 @@ func (a *AccountApp) CashWithDraw(req models.TransactionDepositWithdraw) (respon
 		Amount:        initialBalance,
 	}
 
-	err = a.repo.TransactionCashWithDraw(payloadCashWithDraw)
+	err = a.repo.TransactionCasDeposithWithDraw(payloadCashWithDraw)
 	if err != nil {
 		err = fmt.Errorf("failed to create account")
 		a.log.WithFields(logrus.Fields{
@@ -115,8 +121,7 @@ func (a *AccountApp) CashWithDraw(req models.TransactionDepositWithdraw) (respon
 	response = initialBalance + req.Amount
 
 	a.log.WithFields(logrus.Fields{
-		"payload":       req,
-		"sending_kafka": resKafka,
+		"payload": req,
 	}).Info("cash withdraw success")
 
 	return
@@ -156,9 +161,11 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 			AccountNumberDestination: req.AccountNumberDestination,
 			AmountKliring:            req.AmountKliring,
 			TransactionType:          "K",
+			TransactionDesc:          req.DescTransaction,
 		},
 	}
-	resKafka, err := a.SendMessageToKafka(payload)
+
+	err = a.SendMessageToKafka(payload)
 	if err != nil {
 		a.log.WithFields(logrus.Fields{
 			"error":   err.Error(),
@@ -192,19 +199,18 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 
 	err = a.TransactionTransferKliring(payloadKliring)
 	if err != nil {
-		err = fmt.Errorf("failed to transfer kliring")
 		a.log.WithFields(logrus.Fields{
 			"error":   err.Error(),
 			"payload": req,
 		}).Warn(err.Error())
+		err = fmt.Errorf(err.Error())
 		return
 	}
 
-	// response = initialBalance
+	response = balance[0] - req.AmountKliring
 
 	a.log.WithFields(logrus.Fields{
-		"payload":       req,
-		"sending_kafka": resKafka,
+		"payload": req,
 	}).Info("transfer kliring success")
 
 	return
@@ -212,8 +218,12 @@ func (a *AccountApp) TransferKliring(req models.TransactionKliring) (response fl
 
 func (a *AccountApp) TransactionTransferKliring(req models.TransactionKliring) (err error) {
 
+	a.log.WithFields(logrus.Fields{
+		"request": req,
+	}).Info("request to transfer transaction")
+
 	if req.BalanceSource < req.AmountKliring {
-		err = fmt.Errorf("balance account not enough")
+		err = fmt.Errorf("balance acount number source is not enough")
 		return
 	}
 	// update balance account source
@@ -222,7 +232,7 @@ func (a *AccountApp) TransactionTransferKliring(req models.TransactionKliring) (
 		AccountNumber: req.AccountNumberSource,
 		Amount:        initialBalanceSource,
 	}
-	err = a.repo.TransactionCashWithDraw(payloadSource)
+	err = a.repo.TransactionCasDeposithWithDraw(payloadSource)
 	if err != nil {
 		err = fmt.Errorf(err.Error())
 		return
@@ -231,10 +241,10 @@ func (a *AccountApp) TransactionTransferKliring(req models.TransactionKliring) (
 	// update balance account destination
 	initialBalanceDestination := req.BalanceDestination + req.AmountKliring
 	payloadDestination := models.TransactionDepositWithdraw{
-		AccountNumber: req.AccountNumberSource,
+		AccountNumber: req.AccountNumberDestination,
 		Amount:        initialBalanceDestination,
 	}
-	err = a.repo.TransactionCashWithDraw(payloadDestination)
+	err = a.repo.TransactionCasDeposithWithDraw(payloadDestination)
 	if err != nil {
 		err = fmt.Errorf(err.Error())
 		return

@@ -15,9 +15,10 @@ type messageHandler func(message kafka.Message)
 
 // Map yang memetakan nama topik ke fungsi yang akan menanganinya
 var topicHandlers = map[string]messageHandler{
-	"cash_deposit":  handleCashDepositoTrx, // testing cash deposit
-	"cash_withdraw": handleCashWithDrawTrx,
-	"default_topic": handleDefaultMessage,
+	"cash_deposit":     handleCashDepositoTrx, // testing cash deposit
+	"cash_withdraw":    handleCashWithDrawTrx,
+	"transfer_kliring": handleTransferKliringTrx,
+	"default_topic":    handleDefaultMessage,
 }
 
 func main() {
@@ -100,6 +101,11 @@ func handleCashDepositoTrx(message kafka.Message) {
 }
 
 func handleCashWithDrawTrx(message kafka.Message) {
+	log.Println("Handling message from account_get_topic:", string(message.Value))
+	// Tambahkan logika pengambilan data dari database di sini
+}
+
+func handleTransferKliringTrx(message kafka.Message) {
 	log.Println("Handling message from account_get_topic:", string(message.Value))
 	// Tambahkan logika pengambilan data dari database di sini
 }

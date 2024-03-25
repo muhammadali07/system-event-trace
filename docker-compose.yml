@@ -4,6 +4,7 @@ services:
   postgres:
     image: postgres:latest
     restart: always
+    container_name: database
     environment:
       POSTGRES_DB: devkafka
       POSTGRES_USER: devkafkauser

@@ -11,4 +11,5 @@ type TransactionKliring struct {
 	AmountKliring            float64 `json:"amount_kliring"`
 	BalanceSource            float64 `json:"balance_source"`
 	BalanceDestination       float64 `json:"balance_destination"`
+	DescTransaction          string  `json:"desc_transaction"`
 }

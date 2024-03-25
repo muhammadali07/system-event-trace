@@ -103,7 +103,7 @@ func (i *AcccountApi) transferKliring(ctx *fiber.Ctx) error {
 		"balance": res,
 	}
 
-	return utils.HandleSuccess(ctx, "cash withdraw success", out_response, http.StatusCreated)
+	return utils.HandleSuccess(ctx, "transfer success", out_response, http.StatusCreated)
 }
 
 func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
