@@ -128,6 +128,6 @@ func setupTransaksiRoute(server *fiber.App, api *AcccountApi) {
 	group.Post("/tabung", api.cashDeposit)
 	group.Post("/tarik", api.cashWithdraw)
 	group.Post("/transfer", api.transferKliring)
-	group.Get("/cek-saldo/:accountNumber", api.getAccountBalance)
+	group.Get("/saldo/:accountNumber", api.getAccountBalance)
 	// Add other routes as needed
 }
