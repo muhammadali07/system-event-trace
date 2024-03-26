@@ -15,6 +15,8 @@ type Config struct {
 	DatabasePort     int
 	DatabaseUser     string
 	DatabasePassword string
+	DatabaseDriver   string
+	DatabaseSchema   map[string]string
 	Database         string
 }
 
@@ -33,6 +35,10 @@ func InitConfig() (*Config, error) {
 		return nil, err
 	}
 
+	DB_SCHEMAS := map[string]string{
+		"core": viper.GetString("CORE_SCHEMA"),
+	}
+
 	// Buat instance Config dan isi sesuai dengan konfigurasi yang dibaca
 	config := &Config{
 		KafkaHost:        viper.GetString("KAFKA_HOST"),
@@ -42,6 +48,8 @@ func InitConfig() (*Config, error) {
 		DatabaseHost:     viper.GetString("DATABASE_HOST"),
 		DatabaseUser:     viper.GetString("DATABASE_USER"),
 		DatabasePassword: viper.GetString("DATABASE_PASSWORD"),
+		DatabaseDriver:   viper.GetString("DATABASE_DRIVER"),
+		DatabaseSchema:   DB_SCHEMAS,
 		Database:         viper.GetString("DATABASE"),
 	}
 
