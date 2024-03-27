@@ -1,10 +1,12 @@
-module github.com/muhammadali07/service-grap-go-api/services/financing
+module github.com/muhammadali07/service-grap-go-api/services/corporat
 
 go 1.22.1
 
 require (
-	github.com/gofiber/fiber/v2 v2.52.2
-	github.com/graph-gophers/graphql-go v1.5.0
+	github.com/gofiber/fiber/v2 v2.52.3
+	github.com/jmoiron/sqlx v1.3.5
+	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
 )
 
 require (
