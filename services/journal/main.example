@@ -59,7 +59,7 @@ func main() {
 			go consumeMessages(topic, brokers)
 		}
 	}
-	// 	go consumeMessages(topic, brokers) -> manually getting 1 buy 1 topic by hardcode
+	// 	go consumeMessages(topic, brokers) -> manually getting 1 by 1 topic by hardcode
 
 	select {}
 
