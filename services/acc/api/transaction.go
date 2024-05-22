@@ -6,8 +6,8 @@ import (
 	fiber "github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 
-	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
-	utils "github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
+	"github.com/muhammadali07/system-event-trace/services/acc/models"
+	utils "github.com/muhammadali07/system-event-trace/services/acc/pkg/utils"
 )
 
 func (i *AcccountApi) cashDeposit(ctx *fiber.Ctx) error {

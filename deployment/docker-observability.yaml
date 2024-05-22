@@ -1,0 +1,97 @@
+# development only
+name: set-observability
+
+networks:
+  set :
+    name: set
+    driver: bridge
+    external: true
+
+services:
+  postgres:
+      image: postgres:latest
+      restart: always
+      container_name: set_database
+      environment:
+        POSTGRES_DB: set_dev
+        POSTGRES_USER: set_user
+        POSTGRES_PASSWORD: set_password
+      ports:
+        - "5432:5432"
+
+  cassandra:
+    image: cassandra
+    container_name: cassandra
+    environment:
+      - CASSANDRA_START_RPC=true
+    ports:
+      - 7000:7000
+      - 9042:9042
+    networks:
+      - gl
+
+  cassandra-schema:
+    image: jaegertracing/jaeger-cassandra-schema
+    depends_on:
+      - cassandra
+    networks:
+    - gl
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ../build/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command: --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - gl
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    container_name: otel-collector
+    volumes:
+      - ../build/opentelemetry/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
+    command: --config /etc/otelcol/otel-collector-config.yml
+    ports:
+      - 4318:4318
+      - 8889:8889
+    networks:
+      - gl
+    depends_on:
+      - cassandra
+  
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector
+    container_name: jaeger-collector
+    ports:
+      - 14269:14269
+    environment:
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
+      - CASSANDRA_KEYSPACE=jaeger_v1_dc1
+    networks:
+      - gl
+    depends_on:
+      - otel-collector
+
+  jaeger-query:
+    image: jaegertracing/jaeger-query
+    container_name: jaeger-query
+    ports:
+      - 16686:16686
+      - 16687:16687
+    environment:
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
+      - CASSANDRA_KEYSPACE=jaeger_v1_dc1
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
+      - PROMETHUES_QUERY_NORMALIZE_CALLS=true
+      - PROMETHEUS_QUERY_NORMALIZE_DURATION=true
+    networks:
+      - gl
+    depends_on:
+      - otel-collector

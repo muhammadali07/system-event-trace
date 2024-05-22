@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/muhammadali07/service-grap-go-api/services/acc/api"
-	"github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
+	"github.com/muhammadali07/system-event-trace/services/acc/api"
+	"github.com/muhammadali07/system-event-trace/services/acc/pkg/utils"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

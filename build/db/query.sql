@@ -1,4 +1,4 @@
-create database devkafka;
+create database set_dev;
 
 create table journal (
 	id serial primary key,

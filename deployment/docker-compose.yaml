@@ -1,0 +1,33 @@
+name: set
+
+networks:
+  set:
+    name: set
+    driver: bridge
+    external: true
+
+services:
+  acc:
+    build:
+      context: ../
+      dockerfile: ./builds/acc/${acc_ENV:-dev}.dockerfile
+    container_name: acc-app
+    networks:
+      - set
+    ports:
+      - ${SET_PORT:-8080}:${SET_PORT:-8080}
+    volumes:
+      - ../:/app
+    # depends_on:
+    #   - sqlserver
+    environment:
+      SET_PORT: ${SET_PORT:-80}
+      SET_DB_DRIVER: ${SET_DB_DRIVER:-postgres}
+      SET_DB_HOST: ${SET_DB_HOST:-localhost}
+      SET_DB_PORT: ${SET_DB_PORT:-5432}
+      SET_DB_USER: ${SET_DB_USER:-set_user}
+      SET_DB_PASSWORD: ${SET_DB_PASSWORD:-set_password}
+      SET_DB_DATABASE: ${SET_DB_DATABASE:-set_dev}
+      
+      SET_TELEMENTRY_HOST: ${SET_TELEMENTRY_HOST:-localhost}
+      SET_TELEMENTRY_PORT: ${SET_TELEMENTRY_PORT:-4318}
