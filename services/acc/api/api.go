@@ -3,8 +3,8 @@ package api
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/muhammadali07/service-grap-go-api/services/acc/app"
-	"github.com/muhammadali07/service-grap-go-api/services/acc/repository"
+	"github.com/muhammadali07/system-event-trace/services/acc/app"
+	"github.com/muhammadali07/system-event-trace/services/acc/repository"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )

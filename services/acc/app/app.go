@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/muhammadali07/service-grap-go-api/services/acc/repository"
+	"github.com/muhammadali07/system-event-trace/services/acc/repository"
 	"github.com/sirupsen/logrus"
 )
 

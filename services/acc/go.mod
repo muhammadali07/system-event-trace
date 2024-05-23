@@ -5,7 +5,6 @@ go 1.22.1
 require (
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/gofiber/fiber/v2 v2.52.4
-	github.com/muhammadali07/service-grap-go-api/services/acc v0.0.0-20240405022730-f320e22073a8
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.18.2
