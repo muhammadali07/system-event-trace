@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/muhammadali07/service-grap-go-api/services/journal/pkg/log"
+	"github.com/muhammadali07/system-event-trace/services/journal/pkg/log"
 	"go.opentelemetry.io/otel/trace"
 )
 

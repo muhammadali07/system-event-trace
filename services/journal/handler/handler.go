@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/muhammadali07/service-grap-go-api/services/journal/app"
-	"github.com/muhammadali07/service-grap-go-api/services/journal/pkg/log"
-	"github.com/muhammadali07/service-grap-go-api/services/journal/pkg/utils"
+	"github.com/muhammadali07/system-event-trace/services/journal/app"
+	"github.com/muhammadali07/system-event-trace/services/journal/pkg/log"
+	"github.com/muhammadali07/system-event-trace/services/journal/pkg/utils"
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 )

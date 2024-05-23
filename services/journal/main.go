@@ -43,9 +43,9 @@ func main() {
 	utils.ConnectDB(cfg.DatabaseDriver, cfg.DatabaseUser, cfg.DatabasePassword, cfg.DatabaseHost, cfg.DatabasePort, cfg.Database)
 
 	logger := log.NewLogger(cfg.KafkaServiceName)
-	journalds := datastore.InitDatastore(logger, tracer, true)
-	journalapp := app.InitApplication(journalds, logger, tracer, true)
-	consumerService := handler.InitHandlerKafka(logger, journalapp, tracer, true)
+	ds := datastore.InitDatastore(logger, tracer, true)
+	app := app.InitApplication(ds, logger, tracer, true)
+	consumerService := handler.InitHandlerKafka(cfg.KafkaHost, cfg.KafkaPort, app, logger)
 
 	// dsn := datastore.InitDatastore(cfg.DatabaseDriver, cfg.DatabaseHost, cfg.DatabaseUser, cfg.DatabasePassword, cfg.Database, cfg.DatabasePort, cfg.DatabaseSchema, logger)
 	// app := app.InitApplication(dsn, logger)

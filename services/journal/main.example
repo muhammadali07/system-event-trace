@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/muhammadali07/service-grap-go-api/services/journal/pkg/utils"
+	"github.com/muhammadali07/system-event-trace/services/journal/pkg/utils"
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 )
