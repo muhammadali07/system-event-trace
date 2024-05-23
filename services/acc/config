@@ -1,14 +1,13 @@
-APPHOST=localhost
-APPPORT=3000
-DATABASEPORT=5432
-DATABASEHOST=localhost
-DATABASEUSER=set_user
-DATABASEPASSWORD=set_password
+APP_HOST=localhost
+APP_PORT=3000
+DATABASE_PORT=5432
+DATABASE_HOST=localhost
+DATABASE_USER=set_user
+DATABASE_PASSWORD=set_password
 DATABASE=set_dev
 SERVICE=Account-Service-Kafka
 
 
 # kafka config
-KAFKAHOST=localhost
-KAFKAPORT=9092
-KAFKATOPICS=account_topic
+KAFKA_HOST=localhost
+KAFKA_PORT=9092

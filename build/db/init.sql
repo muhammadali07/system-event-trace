@@ -7,15 +7,18 @@ create table journal (
 	account_number_debit varchar(30),
 	amount_credit decimal,
 	amount_debit decimal,
-	type_transaction varchar(1)
+	type_transaction varchar(1),
+	created_at timestamp
 );
 
 create table accounts (
 	id serial primary key,
-	nama varchar(200),
+	name varchar(200),
 	nik varchar(36),
-	no_hp varchar(20),
+	phone_number varchar(20),
 	pin text,
-	nomor_rekening varchar(20),
+	account_number varchar(20),
+	balance numeric(28,2),
+	status varchar(1),
 	created_at timestamp
 );

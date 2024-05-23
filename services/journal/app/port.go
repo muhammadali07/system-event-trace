@@ -1,8 +1,6 @@
 package app
 
-import (
-	"github.com/jackc/pgx/v5"
-)
+import "gorm.io/gorm"
 
 type JournalServicePort interface {
 	HandleCashDeposito(payload any) (err error)
@@ -12,7 +10,7 @@ type JournalServicePort interface {
 }
 
 type JournalDatastorePort interface {
-	Begin() (tx *pgx.Conn, err error)
-	// Rollback(tx *pgx.Conn)
-	// Commit(tx *pgx.Conn)
+	Begin() (tx *gorm.DB, err error)
+	Rollback(tx *gorm.DB)
+	Commit(tx *gorm.DB)
 }

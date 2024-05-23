@@ -1,54 +1,57 @@
 package datastore
 
 import (
-	"context"
 	"fmt"
-	"os"
 
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/sirupsen/logrus"
+	"go.opentelemetry.io/otel/trace"
+	"gorm.io/gorm"
 
 	"github.com/muhammadali07/service-grap-go-api/services/journal/pkg/log"
+	"github.com/muhammadali07/system-event-trace/services/journal/pkg/utils"
 )
 
 type JournalDatabase struct {
-	log         *log.Logger
-	driver      string
-	db          *pgxpool.Pool
-	core_schema string
+	db     *gorm.DB
+	log    *log.Logger
+	tracer trace.Tracer
 }
 
-// func (f *JournalDatabase) Begin() (tx *pgx.Conn, err error) {
-// 	// Gunakan `pool.Begin` untuk memulai transaksi
-// 	tx, err = f.db.pool.Begin(context.Background())
-// 	if err != nil {
-// 		remark := "ds: gagal memulai transaksi"
-// 		f.log.Error(logrus.Fields{
-// 			"error": err.Error(), // Gunakan pesan error original
-// 		}, nil, remark)
-// 		return // Kembalikan error original
-// 	}
-// 	return tx, nil
-// }
-
-func InitDatastore(driver, host, user, password, database string, port int, map_schema map[string]string, log *log.Logger) *JournalDatabase {
-	// Buat konfigurasi koneksi
-	// urlExample := "postgres://username:password@localhost:5432/database_name"
-	config := fmt.Sprintf("%v://%v:%v@%v:%v/%v", driver, user, password, host, port, database)
-
-	// Buat koneksi ke database
-	conn, err := pgx.Connect(context.Background(), config)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-		panic(err)
+func (f *JournalDatabase) Begin() (tx *gorm.DB, err error) {
+	tx = f.db.Begin()
+	if tx.Error != nil {
+		remark := "failed to start transaction"
+		f.log.Error(logrus.Fields{
+			"error": tx.Error.Error(),
+		}, nil, remark)
+		err = fmt.Errorf(remark)
 	}
-	defer conn.Close(context.Background())
+	return
+}
+
+func (f *JournalDatabase) Rollback(tx *gorm.DB) {
+	err := tx.Rollback()
+	if err != nil {
+		f.log.Error(logrus.Fields{
+			"error": err.Error,
+		}, nil, "failed to rollback transaction")
+	}
+}
+
+func (f *JournalDatabase) Commit(tx *gorm.DB) {
+	err := tx.Commit()
+	if err != nil {
+		f.log.Error(logrus.Fields{
+			"error": err.Error,
+		}, nil, "failed to commit transaction")
+	}
+}
+
+func InitDatastore(log *log.Logger, tracer trace.Tracer, traceEnabled bool) *JournalDatabase {
 
 	return &JournalDatabase{
-		log:         log,
-		driver:      driver,
-		db:          conn,
-		core_schema: map_schema["public"],
+		db:     utils.DBInstance,
+		log:    log,
+		tracer: tracer,
 	}
 }
