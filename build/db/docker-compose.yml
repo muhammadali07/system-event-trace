@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  postgres:
+    build: .
+    container_name: set_database
+    environment:
+      POSTGRES_DB: set_dev
+      POSTGRES_USER: set_user
+      POSTGRES_PASSWORD: set_password
+    ports:
+      - "5432:5432"

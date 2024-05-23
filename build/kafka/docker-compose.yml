@@ -1,17 +1,6 @@
 version: '3.7'
 
 services:
-  postgres:
-    image: postgres:latest
-    restart: always
-    container_name: database
-    environment:
-      POSTGRES_DB: devkafka
-      POSTGRES_USER: devkafkauser
-      POSTGRES_PASSWORD: devkafkapassword
-    ports:
-      - "5432:5432"
-
   kafka:
     image: bitnami/kafka:latest
     restart: always
@@ -33,3 +22,15 @@ services:
     container_name: zookeeper
     ports:
       - "2181:2181"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
+    networks:
+      - set_net

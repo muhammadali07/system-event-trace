@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/muhammadali07/service-grap-go-api/services/acc/models"
-	"github.com/muhammadali07/service-grap-go-api/services/acc/pkg/utils"
+	"github.com/muhammadali07/system-event-trace/services/acc/models"
+	"github.com/muhammadali07/system-event-trace/services/acc/pkg/utils"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
