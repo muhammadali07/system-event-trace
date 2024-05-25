@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type JournalServicePort interface {
 	HandleCashDeposito(payload any) (err error)
-	// HandleCashWithDraw(payload any) (err error)
+	HandleCashWithDraw(payload any) (err error)
 	// HandleTransferKliring(payload any) (err error)
 	// HandleGetListTransaction(payload any) (err error)
 }

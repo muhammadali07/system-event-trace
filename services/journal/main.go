@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if telemetryEndpoint == "" {
-		telemetryEndpoint = ""
+		telemetryEndpoint = cfg.DefaultPort
 	}
 
 	ctx := context.Background()
@@ -53,4 +53,5 @@ func main() {
 
 	// running service consumer
 	consumerService.Start()
+	select {}
 }

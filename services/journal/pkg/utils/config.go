@@ -8,16 +8,19 @@ import (
 type Config struct {
 	// Tambahkan field konfigurasi sesuai dengan kebutuhan Anda.
 	// Misalnya:
-	KafkaHost        string
-	KafkaPort        int
-	KafkaServiceName string
-	DatabaseHost     string
-	DatabasePort     int
-	DatabaseUser     string
-	DatabasePassword string
-	DatabaseDriver   string
-	DatabaseSchema   map[string]string
-	Database         string
+	DefaultPort              string
+	KafkaHost                string
+	KafkaPort                int
+	KafkaServiceName         string
+	DatabaseHost             string
+	DatabasePort             int
+	DatabaseUser             string
+	DatabasePassword         string
+	DatabaseDriver           string
+	DatabaseSchema           map[string]string
+	Database                 string
+	TelemetryEndpoint        string
+	DefaultTelemetryEndpoint string
 }
 
 // InitConfig inisialisasi konfigurasi menggunakan Viper.
@@ -41,16 +44,19 @@ func InitConfig() (*Config, error) {
 
 	// Buat instance Config dan isi sesuai dengan konfigurasi yang dibaca
 	config := &Config{
-		KafkaHost:        viper.GetString("KAFKA_HOST"),
-		KafkaPort:        viper.GetInt("KAFKA_PORT"),
-		KafkaServiceName: viper.GetString("KAFKA_SERVICE"),
-		DatabasePort:     viper.GetInt("DATABASE_PORT"),
-		DatabaseHost:     viper.GetString("DATABASE_HOST"),
-		DatabaseUser:     viper.GetString("DATABASE_USER"),
-		DatabasePassword: viper.GetString("DATABASE_PASSWORD"),
-		DatabaseDriver:   viper.GetString("DATABASE_DRIVER"),
-		DatabaseSchema:   DB_SCHEMAS,
-		Database:         viper.GetString("DATABASE"),
+		DefaultPort:              viper.GetString("DEFAULT_PORT"),
+		KafkaHost:                viper.GetString("KAFKA_HOST"),
+		KafkaPort:                viper.GetInt("KAFKA_PORT"),
+		KafkaServiceName:         viper.GetString("KAFKA_SERVICE"),
+		DatabasePort:             viper.GetInt("DATABASE_PORT"),
+		DatabaseHost:             viper.GetString("DATABASE_HOST"),
+		DatabaseUser:             viper.GetString("DATABASE_USER"),
+		DatabasePassword:         viper.GetString("DATABASE_PASSWORD"),
+		DatabaseDriver:           viper.GetString("DATABASE_DRIVER"),
+		DatabaseSchema:           DB_SCHEMAS,
+		Database:                 viper.GetString("DATABASE"),
+		TelemetryEndpoint:        viper.GetString("TELEMETRY_ENDPOINT"),
+		DefaultTelemetryEndpoint: viper.GetString("DEFAULT_TELEMETRY_ENDPOINT"),
 	}
 
 	return config, nil

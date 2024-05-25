@@ -7,7 +7,6 @@ import (
 	"github.com/muhammadali07/system-event-trace/services/journal/app"
 	"github.com/muhammadali07/system-event-trace/services/journal/pkg/log"
 	"github.com/muhammadali07/system-event-trace/services/journal/pkg/utils"
-	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,25 +17,20 @@ type HandlerKafka struct {
 	address   string
 }
 
-func (h *HandlerKafka) Start() {
+func (h *HandlerKafka) Start() error {
 	cfg, err := utils.InitConfig()
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"config": cfg,
 		}).Warn(err.Error())
 	}
-	// Brokers represent the Kafka cluster to connect to.
-	kafkaAddress := fmt.Sprintf(`%v:%v`, cfg.KafkaHost, cfg.KafkaPort)
-
-	logrus.Info(fmt.Sprintf("Service: %v started successfully 🚀 running on -> %v", cfg.KafkaServiceName, kafkaAddress))
-
-	brokers := []string{kafkaAddress}
-	conn, err := kafka.Dial("tcp", fmt.Sprintf(`%v`, brokers[0]))
+	err = h.RunServiceJournal()
 	if err != nil {
-		panic(err.Error())
+		h.log.Error(logrus.Fields{"err": err.Error()}, nil, "Error RunServiceJournal")
+		return fmt.Errorf(err.Error())
 	}
-	defer conn.Close()
 
+	return nil
 }
 
 func InitHandlerKafka(host string, port int, app app.JournalServicePort, log *log.Logger) *HandlerKafka {
