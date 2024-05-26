@@ -2,8 +2,8 @@ package models
 
 import "time"
 
-type JournalData struct {
-	ID                  int       `json:"id" db:"id"`
+type Journal struct {
+	ID                  uint64    `json:"id" db:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
 	TransactionDate     time.Time `json:"transaction_date" db:"transaction_date"`
 	AccountNumberCredit string    `json:"account_number_credit" db:"account_number_credit"`
 	AccountNumberDebit  string    `json:"account_number_debit" db:"account_number_debit"`

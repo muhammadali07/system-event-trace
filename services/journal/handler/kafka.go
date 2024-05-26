@@ -39,20 +39,16 @@ func (h *HandlerKafka) RunServiceJournal() (err error) {
 	for _, p := range partitions {
 		m[p.Topic] = struct{}{}
 	}
-	logrus.Info(m)
+
 	for topic := range m {
-		handler, _ := h.RouteTopic(topic, nil) // Get the handler function
-		if handler != nil {                    // Only proceed if a handler is found
-			logrus.Info("topic_from_kafka: ", topic)
-			// go h.consumeMessages(topic, brokers) // Pass the handler to consumeMessages
-			res, err := h.consumeMessages(topic, brokers)
-			if err != nil {
-				panic(err.Error())
-			}
-			h.log.Info(logrus.Fields{
-				"resutl": res,
-			}, nil, "result handler by topic")
+		h.log.Info(logrus.Fields{"topic": topic}, nil, "topic_from_kafka")
+		res, err := h.consumeMessages(topic, brokers)
+		if err != nil {
+			panic(err.Error())
 		}
+		h.log.Info(logrus.Fields{
+			"result": res,
+		}, nil, "result handler by topic")
 	}
 	// 	go consumeMessages(topic, brokers) -> manually getting 1 by 1 topic by hardcode
 
@@ -79,7 +75,6 @@ func (h *HandlerKafka) consumeMessages(topic string, brokers []string) (response
 			log.Println("Error reading message:", err)
 			continue
 		}
-		log.Printf("Received message from topic %s: %s\n", topic, message.Value)
 		// Panggil fungsi penangan pesan berdasarkan topik
 		response, err = h.RouteTopic(topic, message.Value)
 		if err != nil {
@@ -88,6 +83,5 @@ func (h *HandlerKafka) consumeMessages(topic string, brokers []string) (response
 				"err":      err,
 			}, nil, "handling route topic")
 		}
-		// fmt.Println(response)
 	}
 }

@@ -53,6 +53,6 @@ func ConnectDB(dbDriver, dbUser string, dbPassword string, dbHost string, dbPort
 }
 
 func MigrateDB() {
-	DBInstance.AutoMigrate(&models.JournalData{})
+	DBInstance.AutoMigrate(&models.Journal{})
 	fmt.Println("Database migration completed....")
 }
