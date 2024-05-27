@@ -158,6 +158,7 @@ func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
 
 func setupTransaksiRoute(server *fiber.App, api *AcccountApi) {
 	group := server.Group("/transaction")
+	group.Use()
 	group.Post("/tabung", api.cashDeposit)
 	group.Post("/tarik", api.cashWithdraw)
 	group.Post("/transfer", api.transferKliring)

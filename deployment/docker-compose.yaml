@@ -2,7 +2,7 @@ name: set
 
 networks:
   set:
-    name: set
+    name: set_net
     driver: bridge
     external: true
 
@@ -10,12 +10,12 @@ services:
   acc:
     build:
       context: ../
-      dockerfile: ./builds/acc/${acc_ENV:-dev}.dockerfile
+      dockerfile: ./build/acc/${acc_ENV:-dev}.dockerfile
     container_name: acc-app
     networks:
       - set
     ports:
-      - ${SET_PORT:-8080}:${SET_PORT:-8080}
+      - ${SET_PORT:-3000}:${SET_PORT:-3000}
     volumes:
       - ../:/app
     # depends_on:
