@@ -8,17 +8,18 @@ import (
 type Config struct {
 	// Tambahkan field konfigurasi sesuai dengan kebutuhan Anda.
 	// Misalnya:
-	AppHost          string
-	AppPort          int
-	DatabaseHost     string
-	DatabasePort     int
-	DatabaseUser     string
-	DatabasePassword string
-	Database         string
-	Service          string
-	KafkaHost        string
-	KafkaPort        int
-	KafkaTopic       string
+	AppHost                  string
+	AppPort                  int
+	DatabaseHost             string
+	DatabasePort             int
+	DatabaseUser             string
+	DatabasePassword         string
+	Database                 string
+	Service                  string
+	KafkaHost                string
+	KafkaPort                int
+	KafkaTopic               string
+	DefaultTelemetryEndpoint string
 }
 
 // InitConfig inisialisasi konfigurasi menggunakan Viper.
@@ -38,16 +39,17 @@ func InitConfig() (*Config, error) {
 
 	// Buat instance Config dan isi sesuai dengan konfigurasi yang dibaca
 	config := &Config{
-		AppHost:          viper.GetString("APP_HOST"),
-		AppPort:          viper.GetInt("APP_PORT"),
-		DatabasePort:     viper.GetInt("DATABASE_PORT"),
-		DatabaseHost:     viper.GetString("DATABASE_HOST"),
-		DatabaseUser:     viper.GetString("DATABASE_USER"),
-		DatabasePassword: viper.GetString("DATABASE_PASSWORD"),
-		Database:         viper.GetString("DATABASE"),
-		Service:          viper.GetString("SERVICE"),
-		KafkaHost:        viper.GetString("KAFKA_HOST"),
-		KafkaPort:        viper.GetInt("KAFKA_PORT"),
+		AppHost:                  viper.GetString("APP_HOST"),
+		AppPort:                  viper.GetInt("APP_PORT"),
+		DatabasePort:             viper.GetInt("DATABASE_PORT"),
+		DatabaseHost:             viper.GetString("DATABASE_HOST"),
+		DatabaseUser:             viper.GetString("DATABASE_USER"),
+		DatabasePassword:         viper.GetString("DATABASE_PASSWORD"),
+		Database:                 viper.GetString("DATABASE"),
+		Service:                  viper.GetString("SERVICE"),
+		KafkaHost:                viper.GetString("KAFKA_HOST"),
+		KafkaPort:                viper.GetInt("KAFKA_PORT"),
+		DefaultTelemetryEndpoint: viper.GetString("DEFAULT_TELEMETRY_ENDPOINT"),
 	}
 
 	return config, nil

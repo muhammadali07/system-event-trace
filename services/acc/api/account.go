@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	fiber "github.com/gofiber/fiber/v2"
@@ -15,6 +16,9 @@ var (
 )
 
 func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
+	_, span := i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
+
 	var req models.Account
 	err := ctx.BodyParser(&req)
 	if err != nil {
@@ -34,7 +38,7 @@ func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
 		return utils.HandleError(ctx, remark, http.StatusBadRequest)
 	}
 
-	res, err := i.app.CreateAccount(&req)
+	res, err := i.app.CreateAccount(ctx.Context(), &req)
 	if err != nil {
 		return utils.HandleError(ctx, err.Error(), http.StatusBadRequest)
 	}
@@ -42,6 +46,11 @@ func (i *AcccountApi) createAccount(ctx *fiber.Ctx) error {
 	out_response := map[string]interface{}{
 		"account_number": res,
 	}
+
+	_, span = i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(i.tracer, ctx.Context())
 
 	return utils.HandleSuccess(ctx, "registration account number success", out_response, http.StatusCreated)
 }

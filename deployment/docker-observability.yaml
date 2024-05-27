@@ -32,6 +32,7 @@ services:
 
   cassandra-schema:
     image: jaegertracing/jaeger-cassandra-schema
+    container_name: set_cassandra-schema
     depends_on:
       - cassandra
     networks:

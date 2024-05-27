@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
@@ -11,7 +12,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func (a *AccountApp) CreateAccount(req *models.Account) (response string, err error) {
+func (a *AccountApp) CreateAccount(ctx context.Context, req *models.Account) (response string, err error) {
+	_, span := a.tracer.Start(ctx, fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
 	// validation account number exist
 
 	valAccountNumber, err := a.GetAccountNumber(models.ReqGetAccountNumber{
@@ -41,7 +44,6 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 	}
 
 	payloadInsert := &models.Account{
-		ID:            req.ID,
 		Name:          req.Name,
 		NIK:           req.NIK,
 		PhoneNumber:   req.PhoneNumber,
@@ -67,6 +69,12 @@ func (a *AccountApp) CreateAccount(req *models.Account) (response string, err er
 		"phone_number": req.PhoneNumber,
 		"pin":          req.Pin,
 	}).Info("create account success")
+
+	_, span = a.tracer.Start(ctx, fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(a.tracer, ctx)
+
 	return
 }
 

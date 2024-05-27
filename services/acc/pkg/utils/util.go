@@ -1,12 +1,14 @@
 package utils
 
 import (
+	"context"
 	"encoding/hex"
 	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -67,4 +69,16 @@ func VerifyPin(plainPin, encryptedPin string) bool {
 	// Membandingkan kata sandi mentah dengan hasil enkripsi
 	err = bcrypt.CompareHashAndPassword(decodedHash, []byte(plainPin))
 	return err == nil
+}
+
+func randomDuration(min, max int) (duration int) {
+	duration = rand.Intn(max-min) + min
+	return
+}
+
+func LongProcess(Tracer trace.Tracer, ctx context.Context) {
+	_, span := Tracer.Start(ctx, "longprocess")
+	defer span.End()
+	duration := randomDuration(500, 1000)
+	time.Sleep(time.Duration(duration) * time.Millisecond)
 }

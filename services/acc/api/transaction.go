@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	fiber "github.com/gofiber/fiber/v2"
@@ -11,6 +12,9 @@ import (
 )
 
 func (i *AcccountApi) cashDeposit(ctx *fiber.Ctx) error {
+	_, span := i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
+
 	var req models.TransactionDepositWithdraw
 	err := ctx.BodyParser(&req)
 	if err != nil {
@@ -39,10 +43,18 @@ func (i *AcccountApi) cashDeposit(ctx *fiber.Ctx) error {
 		"balance": res,
 	}
 
+	_, span = i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(i.tracer, ctx.Context())
+
 	return utils.HandleSuccess(ctx, "cash deposito success", out_response, http.StatusCreated)
 }
 
 func (i *AcccountApi) cashWithdraw(ctx *fiber.Ctx) error {
+	_, span := i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
+
 	var req models.TransactionDepositWithdraw
 	err := ctx.BodyParser(&req)
 	if err != nil {
@@ -71,10 +83,18 @@ func (i *AcccountApi) cashWithdraw(ctx *fiber.Ctx) error {
 		"balance": res,
 	}
 
+	_, span = i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(i.tracer, ctx.Context())
+
 	return utils.HandleSuccess(ctx, "cash withdraw success", out_response, http.StatusCreated)
 }
 
 func (i *AcccountApi) transferKliring(ctx *fiber.Ctx) error {
+	_, span := i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
+
 	var req models.TransactionKliring
 	err := ctx.BodyParser(&req)
 	if err != nil {
@@ -103,10 +123,18 @@ func (i *AcccountApi) transferKliring(ctx *fiber.Ctx) error {
 		"balance": res,
 	}
 
+	_, span = i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(i.tracer, ctx.Context())
+
 	return utils.HandleSuccess(ctx, "transfer success", out_response, http.StatusCreated)
 }
 
 func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
+	_, span := i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "start"))
+	defer span.End()
+
 	accountNumber := ctx.Params("accountNumber")
 
 	i.log.WithFields(logrus.Fields{"accountNumber": accountNumber})
@@ -119,6 +147,11 @@ func (i *AcccountApi) getAccountBalance(ctx *fiber.Ctx) error {
 	out_response := map[string]interface{}{
 		"saldo": res.Respdata,
 	}
+
+	_, span = i.tracer.Start(ctx.Context(), fmt.Sprintf("createAccount %s ", "finish"))
+	defer span.End()
+
+	utils.LongProcess(i.tracer, ctx.Context())
 
 	return utils.HandleSuccess(ctx, res.RespMsg, out_response, http.StatusCreated)
 }

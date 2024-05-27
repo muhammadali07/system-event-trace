@@ -5,7 +5,7 @@ import (
 )
 
 type Account struct {
-	ID            uint      `json:"id" gorm:"primarykey"`
+	ID            uint      `json:"id" db:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
 	Name          string    `json:"name"`
 	NIK           string    `json:"nik"`
 	PhoneNumber   string    `json:"phone_number"`
